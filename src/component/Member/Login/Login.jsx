@@ -16,7 +16,7 @@ import { AuthContext } from "../../../context/AuthContext";
 import { axiosPublic } from "../../../api/reqService";
 
 const Login = () => {
-  const CLIENT_API = window.ENV?.CLIENT_URL || "http://localhost:5173";
+  const CLIENT_API = window.ENV?.CLIENT_URL || "http://yoosh.store";
   const NAVER_REDIRECT_URI = `${CLIENT_API}/members/naver/callback`;
   const navi = useNavigate();
   const NAVER_CLIENT_ID = window.ENV?.NAVER_CLIENT_ID;
