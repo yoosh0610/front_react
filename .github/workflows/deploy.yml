@@ -1,0 +1,66 @@
+name: Deploy React App
+# 조건
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+# 실행내용
+jobs:
+  build-and-deploy: # 실행할 이름
+    runs-on: ubuntu-latest # 실행할 환경 - git에서 지원하는 최신버전
+
+    steps: # 무슨 작업할지
+      - uses: actions/checkout@v4 # ubuntu명령어(git의 공식액션)
+
+      - name: setup Node.js # Node설치하기
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install Dependencies # 디펜던시 설치
+        run: npm ci
+
+      - name: React project build # 빌드하기
+        run: npm run build
+
+      - name: prepare Target Directory # dist폴더 지우기
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            sudo rm -rf /home/ubuntu/deploy/front/dist
+            mkdir -p /home/ubuntu/deploy/front/dist
+
+      - name: Deploy React project To EC2 # dist폴더로 빌드파일 옮기기
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "dist/"
+          target: "/home/ubuntu/deploy/front"
+          overwrite: true # 덮어쓰기
+
+      - name: # 파일 권한 부여
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            sudo chown -R ubuntu:ubuntu /home/ubuntu/deploy/front
+            sudo chmod -R 755 /home/ubuntu/deploy/front
+
+      - name: # 배포 다시 시작
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/ubuntu/deploy/
+            docker compose restart web
