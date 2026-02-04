@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 import fileImg from "../../../assets/LoginFileImg.png";
-import kakaoImg from "../../../assets/KakaoButton2.png";
+import kakaoImg from "../../../assets/kakaoButton2.png";
 import naverImg from "../../../assets/NaverButton.png";
 export const Input = styled.input`
   background: transparent;
