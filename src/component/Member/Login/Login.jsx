@@ -19,6 +19,7 @@ const Login = () => {
   const CLIENT_API = window.ENV?.CLIENT_URL || "http://localhost:5173";
   const NAVER_REDIRECT_URI = `${CLIENT_API}/members/naver/callback`;
   const navi = useNavigate();
+  const NAVER_CLIENT_ID = window.ENV?.NAVER_CLIENT_ID;
 
   const [memberId, setUserId] = useState("");
   const [memberPwd, setUserPwd] = useState("");
@@ -34,7 +35,7 @@ const Login = () => {
     location.href =
       "https://nid.naver.com/oauth2.0/authorize" +
       "?response_type=code" +
-      "&client_id=Kki4fyVYcYf_zkU2HAq8" +
+      `&client_id=${NAVER_CLIENT_ID}` +
       "&redirect_uri=" +
       encodeURIComponent(NAVER_REDIRECT_URI) +
       "&state=state_1763619065972_14825";
