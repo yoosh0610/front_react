@@ -71,7 +71,7 @@ const Home = () => {
     <>
       <Body>
         <Title>
-          <MainTitle>원하는 전기차를 빌리고 공유하세요!</MainTitle>
+          <MainTitle>원하는 전기차를 빌리고 공유하세요!!</MainTitle>
           <SubTitle>
             함께 나눈는 친환경 모빌리티로 지구를 지키고 더 나은 미래를
             만들어가세요
